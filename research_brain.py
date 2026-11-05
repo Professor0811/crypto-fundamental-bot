@@ -1,85 +1,101 @@
 # ==============================================================================
-# RESEARCH BRAIN: Composite Fundamental & Macro Bias Engine
+# RESEARCH BRAIN: 4-Pillar Institutional Synthesis & BTC Dominance Engine
 # ==============================================================================
-
-import time
-import json
-import os
+import requests
 import config_fundamental as cfg
-import sentiment_collector as sent
+import sentiment_collector as sentiment
+import onchain_derivatives as derivatives
 import macro_calendar as macro
-import onchain_derivatives as deriv
+import bot_bridge
+
+def fetch_btc_dominance_and_altseason() -> dict:
+    try:
+        res = requests.get("https://api.coingecko.com/api/v3/global", timeout=5)
+        if res.status_code == 200:
+            data = res.json().get("data", {})
+            mcap_pct = data.get("market_cap_percentage", {})
+            btc_d = float(mcap_pct.get("btc", 54.0))
+            eth_d = float(mcap_pct.get("eth", 13.0))
+            mcap_chg = float(data.get("market_cap_change_percentage_24h_usd", 0.0))
+
+            if btc_d > 58.0 and mcap_chg < -1.5:
+                return {"btc_d": round(btc_d, 2), "eth_d": round(eth_d, 2), "dom_score": -40.0, "alt_status": "ALTCOIN BLEED ⚠️"}
+            elif btc_d < 52.0 and mcap_chg > 0.5:
+                return {"btc_d": round(btc_d, 2), "eth_d": round(eth_d, 2), "dom_score": 45.0, "alt_status": "ALTCOIN SEASON 🚀"}
+            elif mcap_chg >= 1.0:
+                return {"btc_d": round(btc_d, 2), "eth_d": round(eth_d, 2), "dom_score": 25.0, "alt_status": "RISK-ON INFLOW 🟢"}
+            elif mcap_chg <= -2.0:
+                return {"btc_d": round(btc_d, 2), "eth_d": round(eth_d, 2), "dom_score": -35.0, "alt_status": "RISK-OFF OUTFLOW 🔴"}
+            else:
+                return {"btc_d": round(btc_d, 2), "eth_d": round(eth_d, 2), "dom_score": 10.0, "alt_status": "ROTATION STABLE ⚡"}
+    except Exception as e:
+        print(f"[BTC Dominance Fetch Warning]: {e}")
+
+    return {"btc_d": 55.4, "eth_d": 13.2, "dom_score": 5.0, "alt_status": "STABLE FLOW ⚡"}
 
 def calculate_composite_bias() -> dict:
-    """
-    Fear & Greed, Macro Calendar, සහ Derivatives data එකතු කර 
-    අවසාන Composite Bias Score එක (-100 සිට +100 දක්වා) ගණනය කරයි.
-    """
-    # 1. Gather raw data from modules
-    fng_data = sent.fetch_fear_and_greed()
-    macro_data = macro.check_macro_event_proximity()
-    deriv_data = deriv.fetch_derivatives_bias()
+    deriv_data = derivatives.fetch_derivatives_metrics()
+    deriv_score = deriv_data.get("derivatives_score", 0.0)
 
-    # 2. Extract normalized scores
-    fng_score = fng_data.get("normalized_score", 0.0)       # Range: -100 to +100
-    deriv_score = deriv_data.get("derivatives_bias_score", 0.0) # Range: -100 to +100
+    sent_data = sentiment.get_combined_sentiment()
+    sent_score = sent_data.get("sentiment_score", 0.0)
 
-    # Macro calendar score adjustment: 
-    # If high-impact news is coming, score goes to 0 (Neutral / Freeze) and sets freeze flag
-    is_freeze = macro_data.get("is_news_freeze", False)
-    macro_score = 0.0 if not is_freeze else -50.0  # Caution state during macro events
+    dom_data = fetch_btc_dominance_and_altseason()
+    dom_score = dom_data.get("dom_score", 0.0)
 
-    # 3. Calculate Weighted Composite Score
-    # Weights from config: Fear/Greed (35%), Derivatives (40%), Macro Proximity (25%)
-    composite_score = (
-        (fng_score * cfg.WEIGHT_FEAR_GREED) +
+    try:
+        macro_data = macro.check_macro_safety()
+    except Exception:
+        macro_data = {"is_freeze": False, "active_event": None, "macro_score": 10.0}
+
+    is_freeze = bool(macro_data.get("is_freeze", False))
+    macro_score = -80.0 if is_freeze else float(macro_data.get("macro_score", 10.0))
+
+    composite = (
         (deriv_score * cfg.WEIGHT_DERIVATIVES) +
-        (macro_score * cfg.WEIGHT_MACRO_CALENDAR)
+        (sent_score * cfg.WEIGHT_SENTIMENT) +
+        (dom_score * cfg.WEIGHT_DOMINANCE) +
+        (macro_score * cfg.WEIGHT_MACRO)
     )
-    composite_score = round(composite_score, 1)
+    composite_score = round(max(-100.0, min(100.0, composite)), 1)
 
-    # 4. Assign Final Bias Label
     if is_freeze:
-        bias_label = "FREEZE_TRADING (High-Impact Macro Event)"
-    elif composite_score >= 50.0:
+        bias_label = "MACRO_FREEZE"
+    elif composite_score >= 45.0:
         bias_label = "STRONG_BULLISH"
-    elif 20.0 <= composite_score < 50.0:
-        bias_label = "LEAN_BULLISH"
-    elif -20.0 < composite_score < 20.0:
-        bias_label = "NEUTRAL"
-    elif -50.0 <= composite_score <= -20.0:
-        bias_label = "LEAN_BEARISH"
-    else:
+    elif composite_score >= 15.0:
+        bias_label = "BULLISH"
+    elif composite_score <= -45.0:
         bias_label = "STRONG_BEARISH"
+    elif composite_score <= -15.0:
+        bias_label = "BEARISH"
+    else:
+        bias_label = "NEUTRAL"
 
-    result = {
-        "timestamp": time.time(),
+    payload = {
         "composite_score": composite_score,
         "bias_label": bias_label,
         "is_news_freeze": is_freeze,
-        "active_macro_event": macro_data.get("active_event"),
-        "details": {
-            "fear_greed": fng_data,
-            "derivatives": deriv_data,
-            "macro": macro_data
-        }
+        "active_macro_event": macro_data.get("active_event") or "None (Clear Trading Window)",
+        "sentiment_score": sent_score,
+        "fng_value": sent_data.get("fng_value", 50),
+        "fng_label": sent_data.get("fng_label", "Neutral"),
+        "bull_news": sent_data.get("bull_news", 0),
+        "bear_news": sent_data.get("bear_news", 0),
+        "derivatives_score": deriv_score,
+        "btc_funding": deriv_data.get("btc_funding", 0.0001),
+        "eth_funding": deriv_data.get("eth_funding", 0.0001),
+        "sol_funding": deriv_data.get("sol_funding", 0.0001),
+        "btc_oi_usd": deriv_data.get("btc_oi_usd", 0.0),
+        "squeeze_status": deriv_data.get("squeeze_status", "BALANCED"),
+        "deriv_source": deriv_data.get("source", "Bybit V5"),
+        "btc_dominance": dom_data.get("btc_d", 55.0),
+        "altseason_status": dom_data.get("alt_status", "STABLE"),
+        "dom_score": dom_score,
+        "blacklisted_tokens": sent_data.get("blacklisted_tokens", []),
+        "headlines": sent_data.get("headlines", [])
     }
 
-    # 5. Save State to JSON (IPC Bridge for our Futures Execution Bot)
-    try:
-        with open(cfg.MARKET_BIAS_FILE_PATH, "w") as f:
-            json.dump(result, f, indent=4)
-    except Exception as e:
-        print(f"[Research Brain Error] Failed to write bias state file: {e}")
-
-    return result
-
-
-if __name__ == "__main__":
-    print("Running Research Brain Synthesis...")
-    res = calculate_composite_bias()
-    print("==================================================")
-    print(f" FINAL COMPOSITE SCORE: {res['composite_score']} / 100")
-    print(f" MARKET BIAS LABEL    : {res['bias_label']}")
-    print(f" NEWS FREEZE ACTIVE   : {res['is_news_freeze']}")
-    print("==================================================")
+    synced = bot_bridge.update_supabase_bias(payload)
+    payload["supabase_synced"] = synced
+    return payload
