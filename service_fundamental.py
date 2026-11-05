@@ -1,5 +1,5 @@
 # ==============================================================================
-# FUNDAMENTAL BOT CLOUD WEB SERVICE & AUTONOMOUS CYBER SPIDER CANVAS ENGINE
+# FUNDAMENTAL BOT CLOUD WEB SERVICE & FULL LIVE CYBER SPIDER VISUALIZATION
 # ==============================================================================
 import os
 import asyncio
@@ -39,7 +39,7 @@ _LATEST_STATUS = {
 }
 
 async def fundamental_background_worker():
-    print("🧠🕷️ [Fundamental Spider Core] 4-Pillar Neural Loop Started...")
+    print("🧠🕷️ [Full Live Cyber Spider] Autonomous Neural Loop Started...")
     while True:
         try:
             start_ts = time.time()
@@ -64,7 +64,7 @@ async def lifespan(app: FastAPI):
     yield
     task.cancel()
 
-app = FastAPI(title="Chama Capital - Autonomous Cyber Spider", lifespan=lifespan)
+app = FastAPI(title="Chama Capital - Cyber Spider Visual Terminal", lifespan=lifespan)
 
 @app.api_route("/healthz", methods=["GET", "HEAD"])
 @app.api_route("/api/state", methods=["GET", "HEAD"])
@@ -73,21 +73,21 @@ async def health_check():
 
 @app.api_route("/", methods=["GET", "HEAD"])
 async def serve_visual_terminal():
-    return HTMLResponse(content=CYBER_SPIDER_HTML, status_code=200)
+    return HTMLResponse(content=FULL_LIVE_SPIDER_HTML, status_code=200)
 
 
-CYBER_SPIDER_HTML = """<!DOCTYPE html>
+FULL_LIVE_SPIDER_HTML = """<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CHAMA CAPITAL // Autonomous Cyber Spider Macro Engine</title>
+<title>CHAMA CAPITAL // Autonomous Cyber Spider Macro Terminal</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
-    --bg: #020617;
-    --card: rgba(10, 16, 31, 0.90);
-    --border: rgba(0, 242, 254, 0.35);
+    --bg: #01040a;
+    --card: rgba(8, 14, 28, 0.88);
+    --border: rgba(0, 242, 254, 0.32);
     --cyan: #00f2fe;
     --green: #10b981;
     --red: #f43f5e;
@@ -98,7 +98,7 @@ CYBER_SPIDER_HTML = """<!DOCTYPE html>
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body {
-    background: #020617;
+    background: #01040a;
     color: var(--text);
     font-family: 'Inter', sans-serif;
     min-height: 100vh;
@@ -112,17 +112,17 @@ body {
 .header {
     display: flex; justify-content: space-between; align-items: center;
     padding: 12px 20px; background: var(--card); border: 1px solid var(--border);
-    border-radius: 12px; margin-bottom: 12px; backdrop-filter: blur(12px);
-    box-shadow: 0 0 25px rgba(0, 242, 254, 0.1);
+    border-radius: 12px; margin-bottom: 12px; backdrop-filter: blur(14px);
+    box-shadow: 0 0 30px rgba(0, 242, 254, 0.08);
 }
 .brand { display: flex; align-items: center; gap: 12px; }
 .spider-logo {
     font-size: 26px; filter: drop-shadow(0 0 10px var(--cyan));
-    animation: spiderPulse 2s infinite alternate;
+    animation: corePulse 2s infinite alternate;
 }
-@keyframes spiderPulse {
-    0% { transform: scale(0.95); filter: drop-shadow(0 0 6px var(--cyan)); }
-    100% { transform: scale(1.08); filter: drop-shadow(0 0 18px var(--cyan)); }
+@keyframes corePulse {
+    0% { transform: scale(0.96); filter: drop-shadow(0 0 6px var(--cyan)); }
+    100% { transform: scale(1.06); filter: drop-shadow(0 0 18px var(--cyan)); }
 }
 .pill {
     padding: 5px 12px; border-radius: 999px; font-size: 11px; font-weight: 700;
@@ -133,18 +133,18 @@ body {
 @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
 /* ========================================================================= */
-/* THE CYBER SPIDER CANVAS STAGE                                             */
+/* THE FULL-SCREEN CYBER SPIDER ARENA                                        */
 /* ========================================================================= */
 .arena-container {
     position: relative;
     width: 100%;
-    height: 520px;
-    background: radial-gradient(circle at center, rgba(15, 23, 42, 0.98) 0%, #01040d 100%);
+    height: 560px;
+    background: radial-gradient(circle at 50% 45%, #051026 0%, #020712 60%, #01040a 100%);
     border: 1px solid var(--border);
     border-radius: 16px;
     overflow: hidden;
     margin-bottom: 14px;
-    box-shadow: inset 0 0 70px rgba(0, 242, 254, 0.08), 0 0 35px rgba(0, 0, 0, 0.85);
+    box-shadow: inset 0 0 80px rgba(0, 242, 254, 0.06), 0 0 40px rgba(0, 0, 0, 0.9);
 }
 #spiderCanvas {
     position: absolute;
@@ -153,19 +153,19 @@ body {
     z-index: 1;
 }
 
-/* Floating UI Panels Over Canvas (The 4 Web Anchors) */
+/* Floating Web Anchor Cards (Corner Nodes) */
 .anchor-card {
     position: absolute;
     z-index: 5;
     width: 270px;
-    background: rgba(8, 13, 26, 0.92);
+    background: rgba(6, 11, 24, 0.92);
     border: 1px solid var(--border);
     border-radius: 12px;
     padding: 12px 16px;
     backdrop-filter: blur(14px);
-    box-shadow: 0 0 22px rgba(0, 0, 0, 0.7);
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.8);
     pointer-events: none;
-    transition: border-color 0.3s;
+    transition: transform 0.3s ease, border-color 0.3s ease;
 }
 .anc-top-left { top: 16px; left: 16px; border-left: 4px solid var(--cyan); }
 .anc-top-right { top: 16px; right: 16px; border-right: 4px solid var(--purple); text-align: right; }
@@ -176,7 +176,7 @@ body {
 .anchor-name { font-size: 13px; font-weight: 800; margin: 3px 0; color: #fff; }
 .anchor-stat { font-size: 11px; color: #cbd5e1; }
 
-/* Center HUD (Output Score) */
+/* Center HUD Sits Below the Spider */
 .center-hud {
     position: absolute;
     top: 50%; left: 50%;
@@ -184,15 +184,15 @@ body {
     z-index: 6;
     text-align: center;
     pointer-events: none;
-    margin-top: 65px;
+    margin-top: 85px; /* Sits below the animated spider */
 }
 .bias-badge {
-    padding: 4px 16px; border-radius: 999px; font-size: 12px; font-weight: 800;
+    padding: 5px 18px; border-radius: 999px; font-size: 12px; font-weight: 800;
     letter-spacing: 1.5px; display: inline-block; margin-bottom: 4px;
 }
 .score-display {
-    font-size: 46px; font-weight: 900; line-height: 1;
-    text-shadow: 0 0 25px rgba(0, 242, 254, 0.6);
+    font-size: 52px; font-weight: 900; line-height: 1;
+    text-shadow: 0 0 30px rgba(0, 242, 254, 0.6);
 }
 
 /* ========================================================================= */
@@ -230,7 +230,7 @@ body {
 .gate-status { font-size: 13px; font-weight: 800; }
 
 @media (max-width: 950px) {
-    .arena-container { height: 600px; }
+    .arena-container { height: 620px; }
     .bottom-grid { grid-template-columns: 1fr; }
     .anchor-card { width: 220px; }
     .anc-top-right, .anc-bottom-right { text-align: left; border-right: none; border-left: 4px solid var(--purple); }
@@ -260,28 +260,28 @@ body {
     <canvas id="spiderCanvas"></canvas>
 
     <!-- Node 1: Derivatives (Top-Left) -->
-    <div class="anchor-card anc-top-left">
+    <div class="anchor-card anc-top-left" id="card-0">
         <div class="anchor-title">Silk Anchor 1 • 35% Weight</div>
         <div class="anchor-name">Bybit V5 Derivatives & OI</div>
         <div class="anchor-stat mono" id="ui-deriv">Score: +0 | Funding: 0.010%</div>
     </div>
 
     <!-- Node 2: News NLP & Sentiment (Top-Right) -->
-    <div class="anchor-card anc-top-right">
+    <div class="anchor-card anc-top-right" id="card-1">
         <div class="anchor-title" style="color:var(--purple);">Silk Anchor 2 • 35% Weight</div>
         <div class="anchor-name">News NLP & Sentiment Engine</div>
         <div class="anchor-stat mono" id="ui-sent">F&G: 50 | RSS: 0B / 0Br</div>
     </div>
 
     <!-- Node 3: BTC Dominance Radar (Bottom-Left) -->
-    <div class="anchor-card anc-bottom-left">
+    <div class="anchor-card anc-bottom-left" id="card-2">
         <div class="anchor-title" style="color:var(--amber);">Silk Anchor 3 • 15% Weight</div>
         <div class="anchor-name">BTC Dominance & Capital Flow</div>
         <div class="anchor-stat mono" id="ui-dom">BTC.D: 55.4% | Alt Flow: STABLE</div>
     </div>
 
     <!-- Node 4: Macro Freeze Guard (Bottom-Right) -->
-    <div class="anchor-card anc-bottom-right">
+    <div class="anchor-card anc-bottom-right" id="card-3">
         <div class="anchor-title" style="color:var(--green);">Silk Anchor 4 • 15% Weight</div>
         <div class="anchor-name">Macro Economic Guard</div>
         <div class="anchor-stat mono" id="ui-macro">Freeze: CLEAR | Fed Safe</div>
@@ -330,7 +330,7 @@ body {
 </div>
 
 <!-- ========================================================================= -->
-<!-- CYBER SPIDER CANVAS ANIMATION ENGINE                                      -->
+<!-- ADVANCED FULL LIVE CYBER SPIDER SIMULATION SCRIPT                        -->
 <!-- ========================================================================= -->
 <script>
 const canvas = document.getElementById('spiderCanvas');
@@ -352,56 +352,75 @@ canvas.parentElement.addEventListener('mousemove', e => {
 canvas.parentElement.addEventListener('mouseleave', () => { mouse.x = null; mouse.y = null; });
 resizeCanvas();
 
-// Traveling Energy Prey Particles
-let particles = [];
-for (let i = 0; i < 32; i++) {
-    particles.push({
-        targetCorner: Math.floor(Math.random() * 4), // 0: TL, 1: TR, 2: BL, 3: BR
+function getCorners() {
+    return [
+        { x: 140, y: 70, color: '#00f2fe' },          // 0: Top-Left (Derivatives)
+        { x: W - 140, y: 70, color: '#c084fc' },      // 1: Top-Right (Sentiment)
+        { x: 140, y: H - 70, color: '#f59e0b' },      // 2: Bottom-Left (Dominance)
+        { x: W - 140, y: H - 70, color: '#10b981' }   // 3: Bottom-Right (Macro)
+    ];
+}
+
+// Data Pulses (Prey Traveling to the Spider Core)
+let pulses = [];
+for (let i = 0; i < 40; i++) {
+    pulses.push({
+        corner: Math.floor(Math.random() * 4),
         progress: Math.random(),
         speed: 0.005 + Math.random() * 0.008,
-        size: Math.random() * 3 + 2.5
+        length: 18 + Math.random() * 22,
+        width: 2 + Math.random() * 2
     });
 }
 
-function getCorners() {
-    return [
-        { x: 140, y: 65, color: '#00f2fe' },          // 0: Top-Left (Derivatives)
-        { x: W - 140, y: 65, color: '#c084fc' },      // 1: Top-Right (Sentiment)
-        { x: 140, y: H - 65, color: '#f59e0b' },      // 2: Bottom-Left (Dominance)
-        { x: W - 140, y: H - 65, color: '#10b981' }   // 3: Bottom-Right (Macro)
-    ];
+// Shockwave Energy Rings emitted from Spider on Data Ingestion
+let shockwaves = [];
+function triggerShockwave(x, y, color) {
+    if (shockwaves.length < 5) {
+        shockwaves.push({ x, y, radius: 25, maxRadius: 180, alpha: 0.8, color });
+    }
 }
 
 let tick = 0;
 
-// Draw Concentric Spider Web Rings
-function drawConcentricWeb(cx, cy, maxRadius) {
-    const rings = 6;
+// Draw Complex Procedural Concentric Hexagonal Spider Web
+function drawLivingSpiderWeb(cx, cy, maxR, mainColor) {
+    const rings = 8;
     const spokes = 16;
 
     ctx.save();
-    ctx.lineWidth = 0.7;
-
-    // Draw Spokes
+    // 1. Spokes (Radial Silk Threads)
     for (let s = 0; s < spokes; s++) {
         const angle = (s / spokes) * Math.PI * 2;
         ctx.strokeStyle = 'rgba(0, 242, 254, 0.12)';
+        ctx.lineWidth = 1;
         ctx.beginPath();
         ctx.moveTo(cx, cy);
-        ctx.lineTo(cx + Math.cos(angle) * maxRadius, cy + Math.sin(angle) * maxRadius);
+
+        // Organic thread wave
+        let endX = cx + Math.cos(angle) * maxR;
+        let endY = cy + Math.sin(angle) * maxR;
+        let midX = (cx + endX) / 2 + Math.sin(tick * 0.03 + s) * 6;
+        let midY = (cy + endY) / 2 + Math.cos(tick * 0.03 + s) * 6;
+
+        ctx.quadraticCurveTo(midX, midY, endX, endY);
         ctx.stroke();
     }
 
-    // Draw Concentric Rings
+    // 2. Concentric Web Rings (Spiraling Network)
     for (let r = 1; r <= rings; r++) {
-        const radius = (r / rings) * maxRadius;
-        ctx.strokeStyle = `rgba(0, 242, 254, ${0.06 + (r / rings) * 0.14})`;
+        const radius = (r / rings) * maxR;
+        const ringAlpha = 0.06 + (r / rings) * 0.14;
+        ctx.strokeStyle = `rgba(0, 242, 254, ${ringAlpha})`;
+        ctx.lineWidth = 1.1;
+
         ctx.beginPath();
         for (let s = 0; s <= spokes; s++) {
             const angle = (s / spokes) * Math.PI * 2;
-            const wobble = Math.sin(tick * 0.03 + r + s) * 2.5;
+            const wobble = Math.sin(tick * 0.04 + r * 1.5 + s) * 3;
             const px = cx + Math.cos(angle) * (radius + wobble);
             const py = cy + Math.sin(angle) * (radius + wobble);
+
             if (s === 0) ctx.moveTo(px, py);
             else ctx.lineTo(px, py);
         }
@@ -410,82 +429,107 @@ function drawConcentricWeb(cx, cy, maxRadius) {
     ctx.restore();
 }
 
-// Draw the Glowing Cybernetic Spider
+// Procedural Articulated Cyber Spider (Inverse Kinematics Body & Legs)
 function drawCyberSpider(cx, cy, color) {
     ctx.save();
 
-    // 1. Cyber Abdomen / Core Glow
-    ctx.shadowBlur = 30;
+    // Subtle breathing displacement
+    let breathe = Math.sin(tick * 0.06) * 2;
+    let spiderY = cy + breathe;
+
+    // 1. Abdomen & Core Glow (Rear)
+    ctx.shadowBlur = 32;
     ctx.shadowColor = color;
 
-    // Rear Abdomen
     ctx.beginPath();
-    ctx.ellipse(cx, cy - 8, 14, 20, 0, 0, Math.PI * 2);
-    ctx.fillStyle = '#050b18';
+    ctx.ellipse(cx, spiderY - 10, 16, 24, 0, 0, Math.PI * 2);
+    ctx.fillStyle = '#040b18';
     ctx.fill();
     ctx.strokeStyle = color;
+    ctx.lineWidth = 2.5;
+    ctx.stroke();
+
+    // Core Circuitry Inside Abdomen
+    ctx.strokeStyle = 'rgba(255,255,255,0.6)';
+    ctx.lineWidth = 1.2;
+    ctx.beginPath();
+    ctx.moveTo(cx, spiderY - 26);
+    ctx.lineTo(cx, spiderY + 2);
+    ctx.moveTo(cx - 8, spiderY - 12);
+    ctx.lineTo(cx + 8, spiderY - 12);
+    ctx.stroke();
+
+    // 2. Cephalothorax (Front Head)
+    ctx.beginPath();
+    ctx.arc(cx, spiderY + 14, 13, 0, Math.PI * 2);
+    ctx.fillStyle = '#071530';
+    ctx.fill();
+    ctx.strokeStyle = '#fff';
     ctx.lineWidth = 2;
     ctx.stroke();
 
-    // Cephalothorax (Front Body)
+    // 3. Glowing Cybernetic Multi-Eyes (8 Eyes)
+    ctx.fillStyle = color;
+    ctx.shadowBlur = 12;
     ctx.beginPath();
-    ctx.arc(cx, cy + 12, 11, 0, Math.PI * 2);
-    ctx.fillStyle = '#09152e';
+    ctx.arc(cx - 5, spiderY + 11, 2.5, 0, Math.PI * 2);
+    ctx.arc(cx + 5, spiderY + 11, 2.5, 0, Math.PI * 2);
+    ctx.arc(cx - 9, spiderY + 15, 1.8, 0, Math.PI * 2);
+    ctx.arc(cx + 9, spiderY + 15, 1.8, 0, Math.PI * 2);
+    ctx.arc(cx - 3, spiderY + 17, 1.5, 0, Math.PI * 2);
+    ctx.arc(cx + 3, spiderY + 17, 1.5, 0, Math.PI * 2);
     ctx.fill();
-    ctx.strokeStyle = '#fff';
-    ctx.lineWidth = 1.8;
-    ctx.stroke();
 
-    // Glowing Chelicerae / Fangs
+    // 4. Chelicerae / Fangs (Mouthparts)
     ctx.strokeStyle = color;
     ctx.lineWidth = 2.5;
     ctx.beginPath();
-    ctx.moveTo(cx - 4, cy + 22);
-    ctx.lineTo(cx - 6, cy + 28);
-    ctx.moveTo(cx + 4, cy + 22);
-    ctx.lineTo(cx + 6, cy + 28);
+    ctx.moveTo(cx - 4, spiderY + 25);
+    ctx.lineTo(cx - 7, spiderY + 33);
+    ctx.moveTo(cx + 4, spiderY + 25);
+    ctx.lineTo(cx + 7, spiderY + 33);
     ctx.stroke();
 
-    // Cybernetic Multiple Eyes (8 Eyes)
-    ctx.fillStyle = color;
-    ctx.shadowBlur = 10;
-    ctx.beginPath();
-    ctx.arc(cx - 4, cy + 9, 2, 0, Math.PI * 2);
-    ctx.arc(cx + 4, cy + 9, 2, 0, Math.PI * 2);
-    ctx.arc(cx - 7, cy + 13, 1.6, 0, Math.PI * 2);
-    ctx.arc(cx + 7, cy + 13, 1.6, 0, Math.PI * 2);
-    ctx.fill();
-
-    // 2. Spider 8 Articulated Legs (Procedural IK Walking Animation)
+    // 5. Procedural 8 Articulated Legs (Realistic Creepy-Crawly Movement)
     ctx.strokeStyle = color;
-    ctx.lineWidth = 2.2;
-    ctx.shadowBlur = 14;
+    ctx.lineWidth = 2.4;
+    ctx.shadowBlur = 16;
 
-    const legAngles = [
-        -0.85, -0.45, -0.15, 0.20,             // Left 4 legs
-        Math.PI + 0.85, Math.PI + 0.45, Math.PI + 0.15, Math.PI - 0.20 // Right 4 legs
-    ];
+    // Angles for the 8 legs
+    const leftAngles = [-0.95, -0.55, -0.15, 0.25];
+    const rightAngles = [Math.PI + 0.95, Math.PI + 0.55, Math.PI + 0.15, Math.PI - 0.25];
+    const allLegs = [...leftAngles, ...rightAngles];
 
-    for (let i = 0; i < legAngles.length; i++) {
-        let baseAngle = legAngles[i];
-        let wobble = Math.sin(tick * 0.05 + i * 0.8) * 0.15;
-        let currentAngle = baseAngle + wobble;
+    for (let i = 0; i < allLegs.length; i++) {
+        let baseAngle = allLegs[i];
+        let walkOffset = Math.sin(tick * 0.05 + i * 1.1) * 0.18;
+        let legAngle = baseAngle + walkOffset;
 
-        let joint1Dist = 32;
-        let joint2Dist = 26;
+        let coxaDist = 12;      // Body connection
+        let femurDist = 34;     // Upper leg
+        let tibiaDist = 28;     // Lower leg
 
-        let j1x = cx + Math.cos(currentAngle) * joint1Dist;
-        let j1y = cy + Math.sin(currentAngle) * joint1Dist - 6;
+        let rootX = cx + Math.cos(legAngle) * coxaDist;
+        let rootY = spiderY + Math.sin(legAngle) * coxaDist;
 
-        let kneeBend = (i < 4) ? -0.8 : 0.8;
-        let j2x = j1x + Math.cos(currentAngle + kneeBend) * joint2Dist;
-        let j2y = j1y + Math.sin(currentAngle + kneeBend) * joint2Dist + 12;
+        let kneeX = rootX + Math.cos(legAngle) * femurDist;
+        let kneeY = rootY + Math.sin(legAngle) * femurDist - 8;
+
+        let kneeBend = (i < 4) ? -0.85 : 0.85;
+        let footX = kneeX + Math.cos(legAngle + kneeBend) * tibiaDist;
+        let footY = kneeY + Math.sin(legAngle + kneeBend) * tibiaDist + 14;
 
         ctx.beginPath();
-        ctx.moveTo(cx + Math.cos(currentAngle) * 10, cy + Math.sin(currentAngle) * 10);
-        ctx.lineTo(j1x, j1y);
-        ctx.lineTo(j2x, j2y);
+        ctx.moveTo(rootX, rootY);
+        ctx.lineTo(kneeX, kneeY);
+        ctx.lineTo(footX, footY);
         ctx.stroke();
+
+        // Glowing Foot Tip
+        ctx.fillStyle = '#fff';
+        ctx.beginPath();
+        ctx.arc(footX, footY, 1.8, 0, Math.PI * 2);
+        ctx.fill();
     }
     ctx.restore();
 }
@@ -498,56 +542,105 @@ function renderScene() {
     const cy = H / 2 - 25;
     const corners = getCorners();
 
-    // 1. Draw Geometric Web Background
-    drawConcentricWeb(cx, cy, Math.min(W, H) * 0.48);
+    // Detect Core Status Color
+    let activeColor = '#00f2fe';
+    const scoreVal = parseFloat(document.getElementById('compositeScore').textContent || '0');
+    if (scoreVal >= 15) activeColor = '#10b981';
+    else if (scoreVal <= -15) activeColor = '#f43f5e';
 
-    // 2. Draw 4 Major Silk Beams (Connecting Corners to Spider)
+    // 1. Draw Living Geometric Spider Web
+    drawLivingSpiderWeb(cx, cy, Math.min(W, H) * 0.48, activeColor);
+
+    // 2. Draw 4 Main Glowing Silk Laser Beams (Connecting Corners)
     for (let i = 0; i < corners.length; i++) {
         let c = corners[i];
         ctx.save();
         ctx.strokeStyle = c.color;
-        ctx.lineWidth = 1.8;
-        ctx.shadowBlur = 15;
+        ctx.lineWidth = 2.2;
+        ctx.shadowBlur = 18;
         ctx.shadowColor = c.color;
 
         ctx.beginPath();
         ctx.moveTo(cx, cy);
-        let midX = (cx + c.x) / 2 + Math.sin(tick * 0.03 + i) * 20;
-        let midY = (cy + c.y) / 2 + Math.cos(tick * 0.03 + i) * 15;
+        let midX = (cx + c.x) / 2 + Math.sin(tick * 0.03 + i) * 22;
+        let midY = (cy + c.y) / 2 + Math.cos(tick * 0.03 + i) * 16;
         ctx.quadraticCurveTo(midX, midY, c.x, c.y);
         ctx.stroke();
         ctx.restore();
     }
 
-    // 3. Draw Traveling Data Particles (Prey Ingestion along silk threads)
-    for (let p of particles) {
+    // 3. Draw Traveling Data Comets (Prey Packets with Laser Tails)
+    for (let p of pulses) {
         p.progress += p.speed;
         if (p.progress >= 1.0) {
             p.progress = 0;
-            p.targetCorner = Math.floor(Math.random() * 4);
+            p.corner = Math.floor(Math.random() * 4);
+            // Trigger shockwave on hitting spider core
+            triggerShockwave(cx, cy, activeColor);
         }
 
-        let c = corners[p.targetCorner];
+        let c = corners[p.corner];
         let px = c.x + (cx - c.x) * p.progress;
         let py = c.y + (cy - c.y) * p.progress;
 
+        // Tail calculation
+        let tailProg = Math.max(0, p.progress - 0.06);
+        let tx = c.x + (cx - c.x) * tailProg;
+        let ty = c.y + (cy - c.y) * tailProg;
+
         ctx.save();
-        ctx.fillStyle = '#fff';
+        let grad = ctx.createLinearGradient(tx, ty, px, py);
+        grad.addColorStop(0, 'transparent');
+        grad.addColorStop(1, c.color);
+
+        ctx.strokeStyle = grad;
+        ctx.lineWidth = p.width;
         ctx.shadowBlur = 14;
         ctx.shadowColor = c.color;
+
         ctx.beginPath();
-        ctx.arc(px, py, p.size, 0, Math.PI * 2);
+        ctx.moveTo(tx, ty);
+        ctx.lineTo(px, py);
+        ctx.stroke();
+
+        // Bright Head
+        ctx.fillStyle = '#fff';
+        ctx.beginPath();
+        ctx.arc(px, py, p.width * 1.2, 0, Math.PI * 2);
         ctx.fill();
         ctx.restore();
     }
 
-    // 4. Mouse Interactive Web Thread
+    // 4. Draw Radial Energy Shockwaves on Data Ingestion
+    for (let i = shockwaves.length - 1; i >= 0; i--) {
+        let sw = shockwaves[i];
+        sw.radius += 3.5;
+        sw.alpha -= 0.02;
+
+        if (sw.alpha <= 0 || sw.radius >= sw.maxRadius) {
+            shockwaves.splice(i, 1);
+            continue;
+        }
+
+        ctx.save();
+        ctx.strokeStyle = sw.color;
+        ctx.lineWidth = 2;
+        ctx.globalAlpha = sw.alpha;
+        ctx.shadowBlur = 15;
+        ctx.shadowColor = sw.color;
+        ctx.beginPath();
+        ctx.arc(sw.x, sw.y, sw.radius, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.restore();
+    }
+
+    // 5. Mouse Magnetic Web Thread Interaction
     if (mouse.x && mouse.y) {
         ctx.save();
-        ctx.strokeStyle = 'rgba(192, 132, 252, 0.6)';
-        ctx.lineWidth = 1.4;
+        ctx.strokeStyle = 'rgba(192, 132, 252, 0.7)';
+        ctx.lineWidth = 1.6;
         ctx.setLineDash([4, 4]);
-        ctx.shadowBlur = 10;
+        ctx.shadowBlur = 12;
         ctx.shadowColor = '#c084fc';
         ctx.beginPath();
         ctx.moveTo(cx, cy);
@@ -556,13 +649,8 @@ function renderScene() {
         ctx.restore();
     }
 
-    // 5. Draw the Autonomous Spider at Center
-    let currentColor = '#00f2fe';
-    const scoreVal = parseFloat(document.getElementById('compositeScore').textContent || '0');
-    if (scoreVal >= 15) currentColor = '#10b981';
-    else if (scoreVal <= -15) currentColor = '#f43f5e';
-
-    drawCyberSpider(cx, cy, currentColor);
+    // 6. Draw Living Cyber Spider at Center
+    drawCyberSpider(cx, cy, activeColor);
 
     requestAnimationFrame(renderScene);
 }
