@@ -1,5 +1,6 @@
 # ==============================================================================
 # FUNDAMENTAL BOT CLOUD WEB SERVICE (Render Free Tier Compatible)
+# Supports both GET and HEAD HTTP methods for UptimeRobot monitoring
 # ==============================================================================
 
 import os
@@ -57,10 +58,11 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(title="Fundamental Research & Macro Bias Engine", lifespan=lifespan)
 
-@app.get("/")
-@app.get("/healthz")
+# Route handles both GET and HEAD methods across root (/) and /healthz
+@app.api_route("/", methods=["GET", "HEAD"])
+@app.api_route("/healthz", methods=["GET", "HEAD"])
 async def health_check():
-    """Health check endpoint for Render and UptimeRobot."""
+    """Health check endpoint supporting both GET and UptimeRobot default HEAD requests."""
     return JSONResponse(status_code=200, content=_LATEST_STATUS)
 
 if __name__ == "__main__":
