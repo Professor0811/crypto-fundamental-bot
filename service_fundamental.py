@@ -1,5 +1,5 @@
 # ==============================================================================
-# FUNDAMENTAL BOT CLOUD WEB SERVICE & SPIDER NEURAL TOPOLOGY DASHBOARD
+# FUNDAMENTAL BOT CLOUD WEB SERVICE & AUTONOMOUS CYBER SPIDER CANVAS ENGINE
 # ==============================================================================
 import os
 import asyncio
@@ -64,7 +64,7 @@ async def lifespan(app: FastAPI):
     yield
     task.cancel()
 
-app = FastAPI(title="Chama Capital - Fundamental Spider Engine", lifespan=lifespan)
+app = FastAPI(title="Chama Capital - Autonomous Cyber Spider", lifespan=lifespan)
 
 @app.api_route("/healthz", methods=["GET", "HEAD"])
 @app.api_route("/api/state", methods=["GET", "HEAD"])
@@ -73,366 +73,540 @@ async def health_check():
 
 @app.api_route("/", methods=["GET", "HEAD"])
 async def serve_visual_terminal():
-    return HTMLResponse(content=SPIDER_DASHBOARD_HTML, status_code=200)
+    return HTMLResponse(content=CYBER_SPIDER_HTML, status_code=200)
 
 
-SPIDER_DASHBOARD_HTML = """<!DOCTYPE html>
+CYBER_SPIDER_HTML = """<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CHAMA CAPITAL // Cyber Spider Quant Intelligence Engine</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<title>CHAMA CAPITAL // Autonomous Cyber Spider Macro Engine</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
-    --bg: #030712;
-    --card: rgba(11, 17, 32, 0.82);
-    --border: rgba(0, 242, 254, 0.22);
+    --bg: #020617;
+    --card: rgba(10, 16, 31, 0.90);
+    --border: rgba(0, 242, 254, 0.35);
     --cyan: #00f2fe;
     --green: #10b981;
     --red: #f43f5e;
     --amber: #f59e0b;
-    --purple: #a855f7;
+    --purple: #c084fc;
     --text: #f8fafc;
     --muted: #94a3b8;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body {
-    background: #030712;
+    background: #020617;
     color: var(--text);
     font-family: 'Inter', sans-serif;
     min-height: 100vh;
-    padding: 16px;
-    position: relative;
+    padding: 14px;
     overflow-x: hidden;
 }
 .mono { font-family: 'JetBrains Mono', monospace; }
+.scifi { font-family: 'Orbitron', sans-serif; }
 
-/* Background Canvas for Spider Web */
-#spider-canvas {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 0;
-    pointer-events: auto;
-}
-
-.content-wrap {
-    position: relative;
-    z-index: 10;
-    max-width: 1400px;
-    margin: 0 auto;
-}
-
-/* Header */
+/* Top Header */
 .header {
     display: flex; justify-content: space-between; align-items: center;
-    padding: 14px 22px; background: var(--card); border: 1px solid var(--border);
-    border-radius: 14px; backdrop-filter: blur(14px); margin-bottom: 16px;
-    box-shadow: 0 0 25px rgba(0, 242, 254, 0.08);
+    padding: 12px 20px; background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; margin-bottom: 12px; backdrop-filter: blur(12px);
+    box-shadow: 0 0 25px rgba(0, 242, 254, 0.1);
 }
-.brand { display: flex; align-items: center; gap: 14px; }
-.spider-orb {
-    width: 44px; height: 44px; border-radius: 12px;
-    background: radial-gradient(circle, #00f2fe 10%, #030712 90%);
-    border: 1px solid var(--cyan);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 22px; box-shadow: 0 0 20px rgba(0, 242, 254, 0.6);
-    animation: webPulse 2.5s infinite alternate ease-in-out;
+.brand { display: flex; align-items: center; gap: 12px; }
+.spider-logo {
+    font-size: 26px; filter: drop-shadow(0 0 10px var(--cyan));
+    animation: spiderPulse 2s infinite alternate;
 }
-@keyframes webPulse {
-    0% { box-shadow: 0 0 10px rgba(0, 242, 254, 0.4); transform: scale(0.96); }
-    100% { box-shadow: 0 0 25px rgba(0, 242, 254, 0.9); transform: scale(1.04); }
+@keyframes spiderPulse {
+    0% { transform: scale(0.95); filter: drop-shadow(0 0 6px var(--cyan)); }
+    100% { transform: scale(1.08); filter: drop-shadow(0 0 18px var(--cyan)); }
 }
-.status-pills { display: flex; gap: 10px; flex-wrap: wrap; }
 .pill {
-    padding: 6px 12px; border-radius: 999px; font-size: 11px; font-weight: 700;
-    display: flex; align-items: center; gap: 7px;
+    padding: 5px 12px; border-radius: 999px; font-size: 11px; font-weight: 700;
+    display: inline-flex; align-items: center; gap: 6px;
     background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);
 }
 .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); animation: blink 1.2s infinite; }
 @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
-/* SPIDER STAGE CANVAS BANNER */
-.spider-stage {
-    background: radial-gradient(circle at center, rgba(0, 242, 254, 0.08) 0%, rgba(3, 7, 18, 0.92) 80%);
+/* ========================================================================= */
+/* THE CYBER SPIDER CANVAS STAGE                                             */
+/* ========================================================================= */
+.arena-container {
+    position: relative;
+    width: 100%;
+    height: 520px;
+    background: radial-gradient(circle at center, rgba(15, 23, 42, 0.98) 0%, #01040d 100%);
     border: 1px solid var(--border);
     border-radius: 16px;
-    padding: 24px;
-    margin-bottom: 20px;
+    overflow: hidden;
+    margin-bottom: 14px;
+    box-shadow: inset 0 0 70px rgba(0, 242, 254, 0.08), 0 0 35px rgba(0, 0, 0, 0.85);
+}
+#spiderCanvas {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 1;
+}
+
+/* Floating UI Panels Over Canvas (The 4 Web Anchors) */
+.anchor-card {
+    position: absolute;
+    z-index: 5;
+    width: 270px;
+    background: rgba(8, 13, 26, 0.92);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 16px;
+    backdrop-filter: blur(14px);
+    box-shadow: 0 0 22px rgba(0, 0, 0, 0.7);
+    pointer-events: none;
+    transition: border-color 0.3s;
+}
+.anc-top-left { top: 16px; left: 16px; border-left: 4px solid var(--cyan); }
+.anc-top-right { top: 16px; right: 16px; border-right: 4px solid var(--purple); text-align: right; }
+.anc-bottom-left { bottom: 16px; left: 16px; border-left: 4px solid var(--amber); }
+.anc-bottom-right { bottom: 16px; right: 16px; border-right: 4px solid var(--green); text-align: right; }
+
+.anchor-title { font-size: 10px; color: var(--cyan); text-transform: uppercase; font-weight: 800; letter-spacing: 1px; }
+.anchor-name { font-size: 13px; font-weight: 800; margin: 3px 0; color: #fff; }
+.anchor-stat { font-size: 11px; color: #cbd5e1; }
+
+/* Center HUD (Output Score) */
+.center-hud {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 6;
     text-align: center;
-    position: relative;
-    backdrop-filter: blur(10px);
-    box-shadow: inset 0 0 40px rgba(0, 242, 254, 0.04);
+    pointer-events: none;
+    margin-top: 65px;
 }
-.spider-title { font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: var(--cyan); font-weight: 800; margin-bottom: 6px; }
-.spider-subtitle { font-size: 13px; color: var(--muted); margin-bottom: 18px; }
-
-/* The Spider Centerpiece */
-.spider-core {
-    display: inline-flex; flex-direction: column; align-items: center; justify-content: center;
-    position: relative; padding: 14px 28px; border-radius: 20px;
-    background: rgba(11, 17, 32, 0.9); border: 1px solid var(--cyan);
-    box-shadow: 0 0 35px rgba(0, 242, 254, 0.25);
-}
-.spider-avatar { font-size: 42px; margin-bottom: 4px; filter: drop-shadow(0 0 12px var(--cyan)); }
-.score-big { font-size: 48px; font-weight: 800; line-height: 1; }
 .bias-badge {
-    padding: 5px 16px; border-radius: 999px; font-size: 12px; font-weight: 800;
-    letter-spacing: 1px; margin-top: 8px;
+    padding: 4px 16px; border-radius: 999px; font-size: 12px; font-weight: 800;
+    letter-spacing: 1.5px; display: inline-block; margin-bottom: 4px;
+}
+.score-display {
+    font-size: 46px; font-weight: 900; line-height: 1;
+    text-shadow: 0 0 25px rgba(0, 242, 254, 0.6);
 }
 
-/* 4 Anchor Nodes connected to Spider */
-.spider-legs-grid {
-    display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 22px;
+/* ========================================================================= */
+/* BOTTOM TELEMETRY PANELS                                                   */
+/* ========================================================================= */
+.bottom-grid {
+    display: grid; grid-template-columns: 1.4fr 1fr; gap: 14px;
 }
-.web-anchor {
-    background: rgba(15, 23, 42, 0.85); border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 12px; padding: 12px 14px; text-align: left; position: relative;
-    transition: transform 0.3s, border-color 0.3s;
-}
-.web-anchor:hover { transform: translateY(-3px); border-color: var(--cyan); }
-.anchor-tag { font-size: 10px; color: var(--cyan); font-weight: 800; text-transform: uppercase; }
-.anchor-name { font-size: 13px; font-weight: 700; margin: 3px 0; }
-.anchor-val { font-size: 12px; color: #cbd5e1; }
-
-/* Bottom Grid */
-.main-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 18px; }
 .panel {
-    background: var(--card); border: 1px solid var(--border); border-radius: 14px;
-    padding: 18px; backdrop-filter: blur(12px);
+    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+    padding: 16px; backdrop-filter: blur(12px);
 }
 .panel-header {
     display: flex; justify-content: space-between; align-items: center;
-    margin-bottom: 14px; padding-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,0.06);
+    margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,0.06);
 }
-.panel-title { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: #e2e8f0; }
+.panel-title { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: #cbd5e1; }
 
-/* News & Blacklist */
-.news-list { display: flex; flex-direction: column; gap: 8px; max-height: 220px; overflow-y: auto; }
+.news-list { display: flex; flex-direction: column; gap: 8px; max-height: 190px; overflow-y: auto; }
 .news-item {
     display: flex; justify-content: space-between; align-items: center; gap: 10px;
     padding: 8px 12px; background: rgba(255,255,255,0.025);
     border-left: 3px solid var(--cyan); border-radius: 6px; font-size: 12px;
 }
-.news-tag { padding: 3px 8px; border-radius: 4px; font-size: 10px; font-weight: 700; white-space: nowrap; }
+.news-tag { padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 700; white-space: nowrap; }
 
-@media (max-width: 900px) {
-    .spider-legs-grid, .main-grid { grid-template-columns: 1fr; }
+.gate-box {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px;
+}
+.gate-card {
+    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 8px; padding: 10px; text-align: center;
+}
+.gate-title { font-size: 10px; color: var(--muted); margin-bottom: 2px; }
+.gate-status { font-size: 13px; font-weight: 800; }
+
+@media (max-width: 950px) {
+    .arena-container { height: 600px; }
+    .bottom-grid { grid-template-columns: 1fr; }
+    .anchor-card { width: 220px; }
+    .anc-top-right, .anc-bottom-right { text-align: left; border-right: none; border-left: 4px solid var(--purple); }
 }
 </style>
 </head>
 <body>
 
-<!-- Animated Spider Web Canvas in Background -->
-<canvas id="spider-canvas"></canvas>
-
-<div class="content-wrap">
-    <!-- Header -->
-    <div class="header">
-        <div class="brand">
-            <div class="spider-orb">🕷️</div>
-            <div>
-                <div style="font-size: 16px; font-weight: 800; letter-spacing: 0.5px;">CHAMA CAPITAL MANAGEMENT</div>
-                <div style="font-size: 11px; color: var(--cyan);" class="mono">AUTONOMOUS QUANT SPIDER // NEURAL MACRO RADAR v3.0</div>
-            </div>
+<div class="header">
+    <div class="brand">
+        <div class="spider-logo">🕷️</div>
+        <div>
+            <div style="font-size: 15px; font-weight: 800; letter-spacing: 0.5px;" class="scifi">CHAMA CAPITAL MANAGEMENT</div>
+            <div style="font-size: 11px; color: var(--cyan);" class="mono">AUTONOMOUS QUANT CYBER SPIDER // NEURAL WEB ENGINE v3.0</div>
         </div>
-        <div class="status-pills">
-            <div class="pill"><span class="dot"></span> <span id="sync-status">SUPABASE BRIDGE: SYNCED</span></div>
-            <div class="pill mono" id="last-sync">SYNCING...</div>
+    </div>
+    <div style="display: flex; gap: 10px;">
+        <div class="pill"><span class="dot"></span> <span id="sync-status">SUPABASE IPC: SYNCED</span></div>
+        <div class="pill mono" id="last-sync">SYNCING...</div>
+    </div>
+</div>
+
+<!-- ========================================================================= -->
+<!-- SPIDER CANVAS ARENA                                                       -->
+<!-- ========================================================================= -->
+<div class="arena-container">
+    <canvas id="spiderCanvas"></canvas>
+
+    <!-- Node 1: Derivatives (Top-Left) -->
+    <div class="anchor-card anc-top-left">
+        <div class="anchor-title">Silk Anchor 1 • 35% Weight</div>
+        <div class="anchor-name">Bybit V5 Derivatives & OI</div>
+        <div class="anchor-stat mono" id="ui-deriv">Score: +0 | Funding: 0.010%</div>
+    </div>
+
+    <!-- Node 2: News NLP & Sentiment (Top-Right) -->
+    <div class="anchor-card anc-top-right">
+        <div class="anchor-title" style="color:var(--purple);">Silk Anchor 2 • 35% Weight</div>
+        <div class="anchor-name">News NLP & Sentiment Engine</div>
+        <div class="anchor-stat mono" id="ui-sent">F&G: 50 | RSS: 0B / 0Br</div>
+    </div>
+
+    <!-- Node 3: BTC Dominance Radar (Bottom-Left) -->
+    <div class="anchor-card anc-bottom-left">
+        <div class="anchor-title" style="color:var(--amber);">Silk Anchor 3 • 15% Weight</div>
+        <div class="anchor-name">BTC Dominance & Capital Flow</div>
+        <div class="anchor-stat mono" id="ui-dom">BTC.D: 55.4% | Alt Flow: STABLE</div>
+    </div>
+
+    <!-- Node 4: Macro Freeze Guard (Bottom-Right) -->
+    <div class="anchor-card anc-bottom-right">
+        <div class="anchor-title" style="color:var(--green);">Silk Anchor 4 • 15% Weight</div>
+        <div class="anchor-name">Macro Economic Guard</div>
+        <div class="anchor-stat mono" id="ui-macro">Freeze: CLEAR | Fed Safe</div>
+    </div>
+
+    <!-- Center HUD (Output Score) -->
+    <div class="center-hud">
+        <div id="biasBadge" class="bias-badge mono" style="background:rgba(0,242,254,0.18); color:var(--cyan);">SYNCHRONIZING</div>
+        <div id="compositeScore" class="score-display scifi mono">+0.0</div>
+        <div style="font-size:10px; color:var(--muted); letter-spacing:1px; margin-top:2px;">SYNTHESIZED MACRO SCORE (-100 to +100)</div>
+    </div>
+</div>
+
+<!-- Bottom Telemetry -->
+<div class="bottom-grid">
+    <div class="panel">
+        <div class="panel-header">
+            <span class="panel-title">📰 Real-Time RSS Stream (Spider Prey Caught in Web)</span>
+            <span class="mono" style="font-size:10px; color:var(--muted);">Auto-Ingested Every 60s</span>
+        </div>
+        <div class="news-list" id="newsBox">
+            <div class="news-item"><span>Spider scanning CoinTelegraph & CoinDesk live RSS...</span></div>
         </div>
     </div>
 
-    <!-- SPIDER WEB CORE STAGE -->
-    <div class="spider-stage">
-        <div class="spider-title">Autonomous Spider Intelligence & Web Topology</div>
-        <div class="spider-subtitle">Synthesizing live decentralized silk threads into an institutional execution gatekeeper</div>
-
-        <div class="spider-core">
-            <div class="spider-avatar">🕷️</div>
-            <div id="composite-score" class="score-big mono">+0.0</div>
-            <div id="bias-badge" class="bias-badge" style="background:rgba(0,242,254,0.15); color:var(--cyan);">SYNCHRONIZING</div>
+    <div class="panel">
+        <div class="panel-header">
+            <span class="panel-title">🛡️ Bybit 10x Futures Bot Execution Guard</span>
+            <span class="mono" style="font-size:10px; color:var(--green);">POSTGRESQL IPC ACTIVE</span>
         </div>
-
-        <!-- 4 Silk Thread Anchors -->
-        <div class="spider-legs-grid">
-            <div class="web-anchor">
-                <div class="anchor-tag">Silk Thread 1 • 35%</div>
-                <div class="anchor-name">Bybit V5 Derivatives</div>
-                <div class="anchor-val mono" id="anc-deriv">Score: 0.0 | Funding: 0.0100%</div>
+        <div class="gate-box">
+            <div class="gate-card">
+                <div class="gate-title">LONG ORDERS</div>
+                <div id="longGate" class="gate-status" style="color:var(--green);">ALLOWED ✅</div>
             </div>
-            <div class="web-anchor">
-                <div class="anchor-tag">Silk Thread 2 • 35%</div>
-                <div class="anchor-name">News NLP & Sentiment</div>
-                <div class="anchor-val mono" id="anc-sent">F&G: 50 | RSS: 0 Bull / 0 Bear</div>
-            </div>
-            <div class="web-anchor">
-                <div class="anchor-tag">Silk Thread 3 • 15%</div>
-                <div class="anchor-name">BTC Dominance Radar</div>
-                <div class="anchor-val mono" id="anc-dom">BTC.D: 55.0% | Flow: STABLE</div>
-            </div>
-            <div class="web-anchor">
-                <div class="anchor-tag">Silk Thread 4 • 15%</div>
-                <div class="anchor-name">Macro Calendar Shield</div>
-                <div class="anchor-val mono" id="anc-macro">Freeze: CLEAR | CPI/Fed Safe</div>
+            <div class="gate-card">
+                <div class="gate-title">SHORT ORDERS</div>
+                <div id="shortGate" class="gate-status" style="color:var(--green);">ALLOWED ✅</div>
             </div>
         </div>
-    </div>
-
-    <!-- Details Grid -->
-    <div class="main-grid">
-        <!-- Live News NLP Stream -->
-        <div class="panel">
-            <div class="panel-header">
-                <span class="panel-title">🕸️ Real-Time News Stream (Spider Web Prey)</span>
-                <span class="mono" style="font-size:11px; color:var(--muted);">Auto-Scanned Every 60s</span>
-            </div>
-            <div class="news-list" id="news-container">
-                <div class="news-item"><span>Spider scanning CoinTelegraph & CoinDesk RSS...</span></div>
-            </div>
-        </div>
-
-        <!-- Pre-Trade Execution Gatekeeper & Blacklist Shield -->
-        <div class="panel">
-            <div class="panel-header">
-                <span class="panel-title">🛡️ Futures Bot Execution Gatekeeper</span>
-                <span class="mono" style="font-size:11px; color:var(--green);">BYBIT 10X SHIELD</span>
-            </div>
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:14px;">
-                <div style="background:rgba(255,255,255,0.03); padding:12px; border-radius:10px; border:1px solid rgba(255,255,255,0.07); text-align:center;">
-                    <div style="font-size:11px; color:var(--muted);">LONG TRADES</div>
-                    <div id="long-gate" style="font-size:13px; font-weight:800; color:var(--green); margin-top:4px;">ALLOWED</div>
-                </div>
-                <div style="background:rgba(255,255,255,0.03); padding:12px; border-radius:10px; border:1px solid rgba(255,255,255,0.07); text-align:center;">
-                    <div style="font-size:11px; color:var(--muted);">SHORT TRADES</div>
-                    <div id="short-gate" style="font-size:13px; font-weight:800; color:var(--green); margin-top:4px;">ALLOWED</div>
-                </div>
-            </div>
-            <div id="blacklist-box" style="padding:14px; border-radius:10px; background:rgba(16,185,129,0.08); border:1px solid rgba(16,185,129,0.3); text-align:center;">
-                <div style="font-size:13px; font-weight:800; color:var(--green);">✅ ZERO BLACKLISTED PAIRS</div>
-                <div style="font-size:11px; color:var(--muted); margin-top:3px;">Exploit & Delist Shield Active across 675 Bybit Pairs</div>
-            </div>
+        <div id="blacklistCard" style="background:rgba(16,185,129,0.08); border:1px solid rgba(16,185,129,0.3); padding:12px; border-radius:8px; text-align:center;">
+            <div style="font-size:12px; font-weight:800; color:var(--green);">✅ ZERO BLACKLISTED PAIRS</div>
+            <div style="font-size:10px; color:var(--muted); margin-top:2px;">Exploit & Delist Shield active across 675 Perpetual pairs</div>
         </div>
     </div>
 </div>
 
-<!-- Spider Web Dynamic Particle Simulation Script -->
+<!-- ========================================================================= -->
+<!-- CYBER SPIDER CANVAS ANIMATION ENGINE                                      -->
+<!-- ========================================================================= -->
 <script>
-const canvas = document.getElementById('spider-canvas');
+const canvas = document.getElementById('spiderCanvas');
 const ctx = canvas.getContext('2d');
-let width, height;
-let points = [];
-const numPoints = 48;
+let W, H;
 let mouse = { x: null, y: null };
 
-function resize() {
-    width = canvas.width = window.innerWidth;
-    height = canvas.height = window.innerHeight;
+function resizeCanvas() {
+    const rect = canvas.parentElement.getBoundingClientRect();
+    W = canvas.width = rect.width;
+    H = canvas.height = rect.height;
 }
-window.addEventListener('resize', resize);
-window.addEventListener('mousemove', (e) => { mouse.x = e.clientX; mouse.y = e.clientY; });
-window.addEventListener('mouseout', () => { mouse.x = null; mouse.y = null; });
-resize();
+window.addEventListener('resize', resizeCanvas);
+canvas.parentElement.addEventListener('mousemove', e => {
+    const rect = canvas.getBoundingClientRect();
+    mouse.x = e.clientX - rect.left;
+    mouse.y = e.clientY - rect.top;
+});
+canvas.parentElement.addEventListener('mouseleave', () => { mouse.x = null; mouse.y = null; });
+resizeCanvas();
 
-// Create floating nodes for the web
-for (let i = 0; i < numPoints; i++) {
-    points.push({
-        x: Math.random() * width,
-        y: Math.random() * height,
-        vx: (Math.random() - 0.5) * 0.8,
-        vy: (Math.random() - 0.5) * 0.8,
-        radius: Math.random() * 2 + 1.5
+// Traveling Energy Prey Particles
+let particles = [];
+for (let i = 0; i < 32; i++) {
+    particles.push({
+        targetCorner: Math.floor(Math.random() * 4), // 0: TL, 1: TR, 2: BL, 3: BR
+        progress: Math.random(),
+        speed: 0.005 + Math.random() * 0.008,
+        size: Math.random() * 3 + 2.5
     });
 }
 
-function drawSpiderWeb() {
-    ctx.clearRect(0, 0, width, height);
+function getCorners() {
+    return [
+        { x: 140, y: 65, color: '#00f2fe' },          // 0: Top-Left (Derivatives)
+        { x: W - 140, y: 65, color: '#c084fc' },      // 1: Top-Right (Sentiment)
+        { x: 140, y: H - 65, color: '#f59e0b' },      // 2: Bottom-Left (Dominance)
+        { x: W - 140, y: H - 65, color: '#10b981' }   // 3: Bottom-Right (Macro)
+    ];
+}
 
-    // Update & draw nodes
-    for (let i = 0; i < points.length; i++) {
-        let p = points[i];
-        p.x += p.vx;
-        p.y += p.vy;
+let tick = 0;
 
-        if (p.x < 0 || p.x > width) p.vx *= -1;
-        if (p.y < 0 || p.y > height) p.vy *= -1;
+// Draw Concentric Spider Web Rings
+function drawConcentricWeb(cx, cy, maxRadius) {
+    const rings = 6;
+    const spokes = 16;
+
+    ctx.save();
+    ctx.lineWidth = 0.7;
+
+    // Draw Spokes
+    for (let s = 0; s < spokes; s++) {
+        const angle = (s / spokes) * Math.PI * 2;
+        ctx.strokeStyle = 'rgba(0, 242, 254, 0.12)';
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.lineTo(cx + Math.cos(angle) * maxRadius, cy + Math.sin(angle) * maxRadius);
+        ctx.stroke();
+    }
+
+    // Draw Concentric Rings
+    for (let r = 1; r <= rings; r++) {
+        const radius = (r / rings) * maxRadius;
+        ctx.strokeStyle = `rgba(0, 242, 254, ${0.06 + (r / rings) * 0.14})`;
+        ctx.beginPath();
+        for (let s = 0; s <= spokes; s++) {
+            const angle = (s / spokes) * Math.PI * 2;
+            const wobble = Math.sin(tick * 0.03 + r + s) * 2.5;
+            const px = cx + Math.cos(angle) * (radius + wobble);
+            const py = cy + Math.sin(angle) * (radius + wobble);
+            if (s === 0) ctx.moveTo(px, py);
+            else ctx.lineTo(px, py);
+        }
+        ctx.stroke();
+    }
+    ctx.restore();
+}
+
+// Draw the Glowing Cybernetic Spider
+function drawCyberSpider(cx, cy, color) {
+    ctx.save();
+
+    // 1. Cyber Abdomen / Core Glow
+    ctx.shadowBlur = 30;
+    ctx.shadowColor = color;
+
+    // Rear Abdomen
+    ctx.beginPath();
+    ctx.ellipse(cx, cy - 8, 14, 20, 0, 0, Math.PI * 2);
+    ctx.fillStyle = '#050b18';
+    ctx.fill();
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Cephalothorax (Front Body)
+    ctx.beginPath();
+    ctx.arc(cx, cy + 12, 11, 0, Math.PI * 2);
+    ctx.fillStyle = '#09152e';
+    ctx.fill();
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = 1.8;
+    ctx.stroke();
+
+    // Glowing Chelicerae / Fangs
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    ctx.moveTo(cx - 4, cy + 22);
+    ctx.lineTo(cx - 6, cy + 28);
+    ctx.moveTo(cx + 4, cy + 22);
+    ctx.lineTo(cx + 6, cy + 28);
+    ctx.stroke();
+
+    // Cybernetic Multiple Eyes (8 Eyes)
+    ctx.fillStyle = color;
+    ctx.shadowBlur = 10;
+    ctx.beginPath();
+    ctx.arc(cx - 4, cy + 9, 2, 0, Math.PI * 2);
+    ctx.arc(cx + 4, cy + 9, 2, 0, Math.PI * 2);
+    ctx.arc(cx - 7, cy + 13, 1.6, 0, Math.PI * 2);
+    ctx.arc(cx + 7, cy + 13, 1.6, 0, Math.PI * 2);
+    ctx.fill();
+
+    // 2. Spider 8 Articulated Legs (Procedural IK Walking Animation)
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 2.2;
+    ctx.shadowBlur = 14;
+
+    const legAngles = [
+        -0.85, -0.45, -0.15, 0.20,             // Left 4 legs
+        Math.PI + 0.85, Math.PI + 0.45, Math.PI + 0.15, Math.PI - 0.20 // Right 4 legs
+    ];
+
+    for (let i = 0; i < legAngles.length; i++) {
+        let baseAngle = legAngles[i];
+        let wobble = Math.sin(tick * 0.05 + i * 0.8) * 0.15;
+        let currentAngle = baseAngle + wobble;
+
+        let joint1Dist = 32;
+        let joint2Dist = 26;
+
+        let j1x = cx + Math.cos(currentAngle) * joint1Dist;
+        let j1y = cy + Math.sin(currentAngle) * joint1Dist - 6;
+
+        let kneeBend = (i < 4) ? -0.8 : 0.8;
+        let j2x = j1x + Math.cos(currentAngle + kneeBend) * joint2Dist;
+        let j2y = j1y + Math.sin(currentAngle + kneeBend) * joint2Dist + 12;
 
         ctx.beginPath();
-        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(0, 242, 254, 0.5)';
-        ctx.fill();
-
-        // Connect nodes within proximity (The Silk Web)
-        for (let j = i + 1; j < points.length; j++) {
-            let p2 = points[j];
-            let dist = Math.hypot(p.x - p2.x, p.y - p2.y);
-            if (dist < 130) {
-                ctx.beginPath();
-                ctx.moveTo(p.x, p.y);
-                ctx.lineTo(p2.x, p2.y);
-                let alpha = (1 - dist / 130) * 0.25;
-                ctx.strokeStyle = `rgba(0, 242, 254, ${alpha})`;
-                ctx.lineWidth = 0.8;
-                ctx.stroke();
-            }
-        }
-
-        // Connect to mouse interaction
-        if (mouse.x && mouse.y) {
-            let mDist = Math.hypot(p.x - mouse.x, p.y - mouse.y);
-            if (mDist < 160) {
-                ctx.beginPath();
-                ctx.moveTo(p.x, p.y);
-                ctx.lineTo(mouse.x, mouse.y);
-                ctx.strokeStyle = `rgba(168, 85, 247, ${0.4 * (1 - mDist / 160)})`;
-                ctx.lineWidth = 1;
-                ctx.stroke();
-            }
-        }
+        ctx.moveTo(cx + Math.cos(currentAngle) * 10, cy + Math.sin(currentAngle) * 10);
+        ctx.lineTo(j1x, j1y);
+        ctx.lineTo(j2x, j2y);
+        ctx.stroke();
     }
-    requestAnimationFrame(drawSpiderWeb);
+    ctx.restore();
 }
-drawSpiderWeb();
 
-// Telemetry Poller
-async function updateTelemetry() {
+function renderScene() {
+    tick++;
+    ctx.clearRect(0, 0, W, H);
+
+    const cx = W / 2;
+    const cy = H / 2 - 25;
+    const corners = getCorners();
+
+    // 1. Draw Geometric Web Background
+    drawConcentricWeb(cx, cy, Math.min(W, H) * 0.48);
+
+    // 2. Draw 4 Major Silk Beams (Connecting Corners to Spider)
+    for (let i = 0; i < corners.length; i++) {
+        let c = corners[i];
+        ctx.save();
+        ctx.strokeStyle = c.color;
+        ctx.lineWidth = 1.8;
+        ctx.shadowBlur = 15;
+        ctx.shadowColor = c.color;
+
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        let midX = (cx + c.x) / 2 + Math.sin(tick * 0.03 + i) * 20;
+        let midY = (cy + c.y) / 2 + Math.cos(tick * 0.03 + i) * 15;
+        ctx.quadraticCurveTo(midX, midY, c.x, c.y);
+        ctx.stroke();
+        ctx.restore();
+    }
+
+    // 3. Draw Traveling Data Particles (Prey Ingestion along silk threads)
+    for (let p of particles) {
+        p.progress += p.speed;
+        if (p.progress >= 1.0) {
+            p.progress = 0;
+            p.targetCorner = Math.floor(Math.random() * 4);
+        }
+
+        let c = corners[p.targetCorner];
+        let px = c.x + (cx - c.x) * p.progress;
+        let py = c.y + (cy - c.y) * p.progress;
+
+        ctx.save();
+        ctx.fillStyle = '#fff';
+        ctx.shadowBlur = 14;
+        ctx.shadowColor = c.color;
+        ctx.beginPath();
+        ctx.arc(px, py, p.size, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+    }
+
+    // 4. Mouse Interactive Web Thread
+    if (mouse.x && mouse.y) {
+        ctx.save();
+        ctx.strokeStyle = 'rgba(192, 132, 252, 0.6)';
+        ctx.lineWidth = 1.4;
+        ctx.setLineDash([4, 4]);
+        ctx.shadowBlur = 10;
+        ctx.shadowColor = '#c084fc';
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.lineTo(mouse.x, mouse.y);
+        ctx.stroke();
+        ctx.restore();
+    }
+
+    // 5. Draw the Autonomous Spider at Center
+    let currentColor = '#00f2fe';
+    const scoreVal = parseFloat(document.getElementById('compositeScore').textContent || '0');
+    if (scoreVal >= 15) currentColor = '#10b981';
+    else if (scoreVal <= -15) currentColor = '#f43f5e';
+
+    drawCyberSpider(cx, cy, currentColor);
+
+    requestAnimationFrame(renderScene);
+}
+renderScene();
+
+// =========================================================================
+// TELEMETRY POLLER (Every 5s from FastAPI backend)
+// =========================================================================
+async function fetchBotState() {
     try {
         const res = await fetch('/api/state');
         const d = await res.json();
 
         const score = parseFloat(d.composite_score || 0);
-        const scoreEl = document.getElementById('composite-score');
+        const scoreEl = document.getElementById('compositeScore');
         scoreEl.textContent = (score >= 0 ? '+' : '') + score.toFixed(1);
 
-        const badge = document.getElementById('bias-badge');
+        const badge = document.getElementById('biasBadge');
         badge.textContent = d.bias_label || 'NEUTRAL';
         if (score >= 15) {
             scoreEl.style.color = 'var(--green)';
-            badge.style.background = 'rgba(16,185,129,0.18)';
+            badge.style.background = 'rgba(16,185,129,0.2)';
             badge.style.color = 'var(--green)';
         } else if (score <= -15) {
             scoreEl.style.color = 'var(--red)';
-            badge.style.background = 'rgba(244,63,94,0.18)';
+            badge.style.background = 'rgba(244,63,94,0.2)';
             badge.style.color = 'var(--red)';
         } else {
             scoreEl.style.color = 'var(--cyan)';
-            badge.style.background = 'rgba(0,242,254,0.15)';
+            badge.style.background = 'rgba(0,242,254,0.18)';
             badge.style.color = 'var(--cyan)';
         }
 
-        // Anchors
+        // Anchors Text
         const bf = (parseFloat(d.btc_funding || 0) * 100).toFixed(4);
-        document.getElementById('anc-deriv').textContent = `Score: ${d.derivatives_score >= 0 ? '+' : ''}${d.derivatives_score} | BTC Fund: ${bf}%`;
-        document.getElementById('anc-sent').textContent = `F&G: ${d.fng_value} (${d.fng_label}) | News: ${d.bull_news}B / ${d.bear_news}Br`;
-        document.getElementById('anc-dom').textContent = `BTC.D: ${d.btc_dominance}% | Flow: ${d.altseason_status}`;
-        document.getElementById('anc-macro').textContent = `Freeze: ${d.is_news_freeze ? 'ACTIVE 🚨' : 'CLEAR ✅'} | ${d.active_macro_event || 'Safe'}`;
+        document.getElementById('ui-deriv').textContent = `Score: ${d.derivatives_score >= 0 ? '+' : ''}${d.derivatives_score} | BTC Fund: ${bf}%`;
+        document.getElementById('ui-sent').textContent = `F&G: ${d.fng_value} (${d.fng_label}) | RSS: ${d.bull_news}B / ${d.bear_news}Br`;
+        document.getElementById('ui-dom').textContent = `BTC.D: ${d.btc_dominance}% | Flow: ${d.altseason_status}`;
+        document.getElementById('ui-macro').textContent = `Freeze: ${d.is_news_freeze ? 'ACTIVE 🚨' : 'CLEAR ✅'} | ${d.active_macro_event || 'Safe'}`;
 
-        // Gatekeeper
+        // Execution Gatekeeper
         const freeze = Boolean(d.is_news_freeze);
-        const lg = document.getElementById('long-gate');
-        const sg = document.getElementById('short-gate');
+        const lg = document.getElementById('longGate');
+        const sg = document.getElementById('shortGate');
         if (freeze) {
             lg.textContent = '⛔ BLOCKED (FREEZE)'; lg.style.color = 'var(--red)';
             sg.textContent = '⛔ BLOCKED (FREEZE)'; sg.style.color = 'var(--red)';
@@ -444,10 +618,10 @@ async function updateTelemetry() {
         }
 
         document.getElementById('last-sync').textContent = 'LAST SYNC: ' + (d.last_synced || '');
-        document.getElementById('sync-status').textContent = d.supabase_synced ? 'SUPABASE BRIDGE: SYNCED ✅' : 'SUPABASE BRIDGE: LOCAL';
+        document.getElementById('sync-status').textContent = d.supabase_synced ? 'SUPABASE IPC: SYNCED ✅' : 'SUPABASE IPC: LOCAL';
 
-        // News List
-        const newsBox = document.getElementById('news-container');
+        // News Headlines List
+        const newsBox = document.getElementById('newsBox');
         if (d.headlines && d.headlines.length > 0) {
             newsBox.innerHTML = d.headlines.map(h => {
                 let col = h.tag === 'BULLISH' ? 'var(--green)' : (h.tag.includes('BEARISH') || h.tag.includes('BLACKLIST') ? 'var(--red)' : 'var(--cyan)');
@@ -459,19 +633,19 @@ async function updateTelemetry() {
         }
 
         // Blacklist Box
-        const blBox = document.getElementById('blacklist-box');
+        const blBox = document.getElementById('blacklistCard');
         if (d.blacklisted_tokens && d.blacklisted_tokens.length > 0) {
             blBox.style.background = 'rgba(244,63,94,0.12)';
             blBox.style.borderColor = 'rgba(244,63,94,0.4)';
-            blBox.innerHTML = `<div style="font-size:13px; font-weight:800; color:var(--red);">🚨 BLOCKED PAIRS: ${d.blacklisted_tokens.join(', ')}</div>
-                               <div style="font-size:11px; color:var(--muted); margin-top:3px;">Protected from High-Risk Exploit/Delist News</div>`;
+            blBox.innerHTML = `<div style="font-size:12px; font-weight:800; color:var(--red);">🚨 BLOCKED PAIRS: ${d.blacklisted_tokens.join(', ')}</div>
+                               <div style="font-size:10px; color:var(--muted); margin-top:2px;">Protected from High-Risk Exploit/Delist News</div>`;
         }
     } catch (e) {
         console.error(e);
     }
 }
-updateTelemetry();
-setInterval(updateTelemetry, 5000);
+fetchBotState();
+setInterval(fetchBotState, 5000);
 </script>
 </body>
 </html>
