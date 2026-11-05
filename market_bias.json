@@ -1,0 +1,28 @@
+{
+    "timestamp": 1793871790.8265953,
+    "composite_score": 4.0,
+    "bias_label": "NEUTRAL",
+    "is_news_freeze": false,
+    "active_macro_event": null,
+    "details": {
+        "fear_greed": {
+            "fear_greed_raw": 50,
+            "sentiment_label": "Neutral",
+            "normalized_score": 0.0,
+            "last_updated": 1793871610.7930284
+        },
+        "derivatives": {
+            "funding_rates": {},
+            "average_funding_pct": 0.01,
+            "derivatives_bias_score": 10.0,
+            "bias_label": "Healthy / Neutral",
+            "last_checked": 1793871730.8151503
+        },
+        "macro": {
+            "is_news_freeze": false,
+            "active_event": null,
+            "minutes_until_event": null,
+            "last_checked": 1793871370.7700465
+        }
+    }
+}
