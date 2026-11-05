@@ -1,64 +1,99 @@
 # ==============================================================================
-# BOT BRIDGE: Connects Fundamental Research Bot to Futures Execution Bot
+# BOT BRIDGE: Verified Supabase Cloud Sync + Telegram Regime Shift Alerts
 # ==============================================================================
-
-import json
 import os
+import json
+import requests
+import psycopg2
 import config_fundamental as cfg
 
-def get_current_market_bias() -> dict:
-    """
-    Fundamental Bot එක මඟින් save කරන ලද market_bias.json file එක කියවා 
-    Futures Bot එකට අවශ්‍ය current macro bias සහ freeze status එක ලබා දෙයි.
-    """
-    default_bias = {
-        "composite_score": 0.0,
-        "bias_label": "NEUTRAL",
-        "is_news_freeze": False,
-        "active_macro_event": None
-    }
+DATABASE_URL = os.environ.get("DATABASE_URL", "")
+_LAST_ALERTED_BIAS = None
+_LAST_ALERTED_FREEZE = False
 
-    if not os.path.exists(cfg.MARKET_BIAS_FILE_PATH):
-        return default_bias
+def _clean_db_url(url: str) -> str:
+    if not url:
+        return ""
+    url = url.strip()
+    if url.startswith("postgres://"):
+        url = url.replace("postgres://", "postgresql://", 1)
+    return url
+
+def send_regime_telegram_alert(message: str):
+    token = cfg.TELEGRAM_BOT_TOKEN
+    chat_id = cfg.TELEGRAM_CHAT_ID
+    if not token or not chat_id:
+        return
+    try:
+        url = f"https://api.telegram.org/bot{token}/sendMessage"
+        requests.post(url, json={"chat_id": chat_id, "text": message, "parse_mode": "Markdown"}, timeout=5)
+    except Exception as e:
+        print(f"[Telegram Alert Error]: {e}")
+
+def update_supabase_bias(payload: dict):
+    global _LAST_ALERTED_BIAS, _LAST_ALERTED_FREEZE
+
+    db_url = _clean_db_url(DATABASE_URL)
+    if not db_url or "[YOUR-PASSWORD]" in db_url:
+        print("[Supabase Bridge Warning]: Valid DATABASE_URL not set!")
+        return False
+
+    score = float(payload.get("composite_score", 0.0))
+    label = str(payload.get("bias_label", "NEUTRAL"))
+    freeze = bool(payload.get("is_news_freeze", False))
+    event = payload.get("active_macro_event")
+    blacklist_str = ",".join(payload.get("blacklisted_tokens", []))
+    btc_dom = float(payload.get("btc_dominance", 54.0))
+    alt_status = str(payload.get("altseason_status", "NEUTRAL"))
+    sent_score = float(payload.get("sentiment_score", 0.0))
+    deriv_score = float(payload.get("derivatives_score", 0.0))
+    headlines_str = json.dumps(payload.get("headlines", [])[:6])
 
     try:
-        with open(cfg.MARKET_BIAS_FILE_PATH, "r") as f:
-            data = json.load(f)
-            return data
+        conn = psycopg2.connect(db_url, sslmode="require", connect_timeout=6)
+        cursor = conn.cursor()
+
+        query = """
+            INSERT INTO public.market_bias (
+                id, composite_score, bias_label, is_news_freeze, active_macro_event,
+                blacklisted_tokens, btc_dominance, altseason_status,
+                sentiment_score, derivatives_score, headlines_json, updated_at
+            )
+            VALUES (1, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, NOW())
+            ON CONFLICT (id) DO UPDATE SET
+                composite_score = EXCLUDED.composite_score,
+                bias_label = EXCLUDED.bias_label,
+                is_news_freeze = EXCLUDED.is_news_freeze,
+                active_macro_event = EXCLUDED.active_macro_event,
+                blacklisted_tokens = EXCLUDED.blacklisted_tokens,
+                btc_dominance = EXCLUDED.btc_dominance,
+                altseason_status = EXCLUDED.altseason_status,
+                sentiment_score = EXCLUDED.sentiment_score,
+                derivatives_score = EXCLUDED.derivatives_score,
+                headlines_json = EXCLUDED.headlines_json,
+                updated_at = NOW();
+        """
+        cursor.execute(query, (
+            score, label, freeze, event, blacklist_str,
+            btc_dom, alt_status, sent_score, deriv_score, headlines_str
+        ))
+        conn.commit()
+        cursor.close()
+        conn.close()
+
+        if (_LAST_ALERTED_BIAS is not None and _LAST_ALERTED_BIAS != label) or (_LAST_ALERTED_FREEZE != freeze):
+            alert_msg = (
+                f"🧠 *Fundamental Regime Shift Detected!*\n"
+                f"• New Bias: `{label} ({score:+.1f})`\n"
+                f"• News Freeze: `{'⛔ ACTIVE (' + str(event) + ')' if freeze else '✅ CLEAR'}`\n"
+                f"• BTC Dominance: `{btc_dom:.1f}% ({alt_status})`\n"
+                f"• Blacklisted Coins: `{blacklist_str if blacklist_str else 'None 🛡️'}`"
+            )
+            send_regime_telegram_alert(alert_msg)
+
+        _LAST_ALERTED_BIAS = label
+        _LAST_ALERTED_FREEZE = freeze
+        return True
     except Exception as e:
-        print(f"[Bot Bridge Error] Failed to read bias state: {e}")
-        return default_bias
-
-def should_block_trade(side: str) -> tuple[bool, str]:
-    """
-    Futures Bot එකෙන් trade එකක් (LONG හෝ SHORT) open කරන්න කලින් 
-    fundamental conditions මඟින් එය block කළ යුතුදැයි පරීක්ෂා කරයි.
-    """
-    bias_data = get_current_market_bias()
-    
-    # 1. Macro News Freeze Check (CPI, FOMC වැනි වෙලාවන් වලදී trades සම්පූර්ණයෙන්ම block කරයි)
-    if bias_data.get("is_news_freeze", False):
-        event_name = bias_data.get("active_macro_event", "High-Impact Macro Event")
-        return True, f"Blocked by Macro Freeze: {event_name}"
-
-    score = bias_data.get("composite_score", 0.0)
-
-    # 2. Heavy Bearish condition එකකදී LONG trades දැමීම වළක්වයි
-    if side.upper() == "LONG" and score <= -50.0:
-        return True, f"Blocked Long: Market is Strongly Bearish (Score: {score})"
-
-    # 3. Heavy Bullish condition එකකදී SHORT trades දැමීම වළක්වයි
-    if side.upper() == "SHORT" and score >= 50.0:
-        return True, f"Blocked Short: Market is Strongly Bullish (Score: {score})"
-
-    return False, "Allowed"
-
-if __name__ == "__main__":
-    print("Testing Bot Bridge...")
-    bias = get_current_market_bias()
-    print(f"Current Bias State: {bias.get('bias_label')} (Score: {bias.get('composite_score')})")
-    print(f"Is News Freeze: {bias.get('is_news_freeze')}")
-    
-    # Test sample blocks
-    blocked, reason = should_block_trade("LONG")
-    print(f"Sample LONG Trade Check -> Blocked: {blocked} | Reason: {reason}")
+        print(f"[Supabase Push Error]: {e}")
+        return False
