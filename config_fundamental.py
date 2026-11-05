@@ -4,10 +4,12 @@
 import os
 
 # Research Synthesis Intervals
-SYNTHESIS_INTERVAL = 60          # Run complete research cycle every 60s
-SENTIMENT_POLL_INTERVAL = 60     # Backward compatibility alias for sentiment worker
-MACRO_POLL_INTERVAL = 300        # Check economic calendar every 5 mins
-DERIVATIVES_POLL_INTERVAL = 60   # Check Bybit/OKX funding rates every 60s
+SYNTHESIS_INTERVAL = 60                   # Complete research cycle every 60s
+SENTIMENT_POLL_INTERVAL = 60              # Sentiment worker alias
+MACRO_POLL_INTERVAL = 300                 # Macro calendar alias
+MACRO_CALENDAR_POLL_INTERVAL = 300        # Macro calendar poll interval
+DERIVATIVES_POLL_INTERVAL = 60            # Derivatives interval
+ONCHAIN_POLL_INTERVAL = 60                # On-chain poll interval
 
 # 4-Pillar Quantitative Weights (Sum = 100%)
 WEIGHT_DERIVATIVES = 0.35   # 35% Bybit V5 Funding + Open Interest
