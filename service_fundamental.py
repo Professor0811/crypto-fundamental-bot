@@ -417,7 +417,7 @@ for (let i = 0; i < 75; i++) {
     });
 }
 
-// 2. Caught Prey Data Nodes on the Web (Spider actually walks to hunt these!)
+// 2. Caught Prey Data Nodes on the Web
 const preyData = [
     { label: 'BTCUSDT', color: '#00f2fe' },
     { label: 'ETHUSDT', color: '#00f2fe' },
@@ -444,7 +444,7 @@ for (let i = 0; i < preyData.length; i++) {
         x: 0,
         y: 0,
         pulse: Math.random() * Math.PI * 2,
-        beingAnalyzed: 0
+        activeLaser: 0
     });
 }
 
@@ -534,7 +534,7 @@ function drawHologramHUD(cx, cy, maxR, color) {
     ctx.restore();
 }
 
-// Draw Concentric Living Hexagonal Web (Centered at Arena Core)
+// Draw Concentric Living Hexagonal Web
 function drawLivingSpiderWeb(cx, cy, maxR) {
     const rings = 8;
     const spokes = 16;
@@ -589,7 +589,6 @@ function updateAndDrawPreyNodes(cx, cy, maxR) {
 
         const isTarget = (i === spider.currentPreyIdx);
 
-        // Outer target reticle if spider is hunting this node
         if (isTarget) {
             ctx.save();
             ctx.strokeStyle = n.color;
@@ -601,7 +600,6 @@ function updateAndDrawPreyNodes(cx, cy, maxR) {
             ctx.restore();
         }
 
-        // Node Orb
         ctx.fillStyle = isTarget ? '#fff' : n.color;
         ctx.shadowBlur = isTarget ? 18 : 10;
         ctx.shadowColor = n.color;
@@ -609,7 +607,6 @@ function updateAndDrawPreyNodes(cx, cy, maxR) {
         ctx.arc(n.x, n.y, isTarget ? 5.5 : 3.5, 0, Math.PI * 2);
         ctx.fill();
 
-        // Node Label
         ctx.shadowBlur = 0;
         ctx.fillStyle = isTarget ? '#00f2fe' : 'rgba(226, 232, 240, 0.85)';
         ctx.fillText(n.label, n.x + 9, n.y + 3);
@@ -617,7 +614,7 @@ function updateAndDrawPreyNodes(cx, cy, maxR) {
     ctx.restore();
 }
 
-// Draw Electric Plasma Extraction Beam between Spider and Prey
+// Draw Electric Plasma Extraction Beam
 function drawElectricBeam(x1, y1, x2, y2, color) {
     ctx.save();
     ctx.strokeStyle = color;
@@ -637,7 +634,6 @@ function drawElectricBeam(x1, y1, x2, y2, color) {
     ctx.lineTo(x2, y2);
     ctx.stroke();
 
-    // Inner white hot core
     ctx.strokeStyle = '#fff';
     ctx.lineWidth = 1;
     ctx.stroke();
@@ -650,7 +646,6 @@ function drawHuntingSpider(sx, sy, angle, walkCycle, color) {
     ctx.translate(sx, sy);
     ctx.rotate(angle);
 
-    // 1. Spider Legs (8 Articulated 3-Segment IK Legs)
     ctx.strokeStyle = color;
     ctx.lineWidth = 2.6;
     ctx.shadowBlur = 16;
@@ -681,7 +676,6 @@ function drawHuntingSpider(sx, sy, angle, walkCycle, color) {
         ctx.lineTo(fX, fY);
         ctx.stroke();
 
-        // Glowing Claw Joint & Tip
         ctx.fillStyle = '#fff';
         ctx.beginPath();
         ctx.arc(kX, kY, 2, 0, Math.PI * 2);
@@ -689,7 +683,6 @@ function drawHuntingSpider(sx, sy, angle, walkCycle, color) {
         ctx.fill();
     }
 
-    // 2. Abdomen (Rear Reactor Core)
     ctx.shadowBlur = 32;
     ctx.shadowColor = color;
     ctx.beginPath();
@@ -700,14 +693,12 @@ function drawHuntingSpider(sx, sy, angle, walkCycle, color) {
     ctx.lineWidth = 2.8;
     ctx.stroke();
 
-    // Glowing Reactor Core inside Abdomen
     let pulseR = 6.5 + Math.sin(tick * 0.12) * 2.8;
     ctx.fillStyle = color;
     ctx.beginPath();
     ctx.arc(0, -15, pulseR, 0, Math.PI * 2);
     ctx.fill();
 
-    // 3. Cephalothorax (Armored Head)
     ctx.beginPath();
     ctx.arc(0, 12, 13.5, 0, Math.PI * 2);
     ctx.fillStyle = '#07142b';
@@ -716,7 +707,6 @@ function drawHuntingSpider(sx, sy, angle, walkCycle, color) {
     ctx.lineWidth = 2.2;
     ctx.stroke();
 
-    // 4. Cybernetic Fangs (Animated Pincers)
     let fangPinch = Math.sin(tick * 0.1) * 2.5;
     ctx.strokeStyle = color;
     ctx.lineWidth = 2.8;
@@ -727,7 +717,6 @@ function drawHuntingSpider(sx, sy, angle, walkCycle, color) {
     ctx.lineTo(7 - fangPinch, 34);
     ctx.stroke();
 
-    // 5. Glowing Eyes (Laser Optics)
     ctx.fillStyle = '#fff';
     ctx.shadowBlur = 14;
     ctx.shadowColor = '#fff';
@@ -755,7 +744,6 @@ function renderScene() {
     if (scoreVal >= 15) activeColor = '#10b981';
     else if (scoreVal <= -15) activeColor = '#f43f5e';
 
-    // 1. Ambient Matrix Stars
     ctx.save();
     for (let st of bgStars) {
         st.x += st.vx; st.y += st.vy;
@@ -768,22 +756,15 @@ function renderScene() {
     }
     ctx.restore();
 
-    // 2. Holographic HUD & Radar Sweep
     drawHologramHUD(cx, cy, maxR, activeColor);
-
-    // 3. Living Concentric Spider Web
     drawLivingSpiderWeb(cx, cy, maxR);
-
-    // 4. Update & Draw Prey Nodes
     updateAndDrawPreyNodes(cx, cy, maxR);
 
-    // 5. Autonomous Spider Hunting AI Logic
     if (spider.x === 0) { spider.x = cx; spider.y = cy; spider.targetX = cx; spider.targetY = cy; }
 
     let activePrey = preyNodes[spider.currentPreyIdx];
 
     if (mouse.x && mouse.y) {
-        // Follow user mouse when hovering inside arena
         let dx = mouse.x - cx;
         let dy = mouse.y - cy;
         let dist = Math.hypot(dx, dy);
@@ -791,15 +772,13 @@ function renderScene() {
         spider.targetY = cy + (dy / (dist || 1)) * Math.min(dist * 0.55, maxR * 0.65);
         spider.targetAngle = Math.atan2(mouse.y - spider.y, mouse.x - spider.x) - Math.PI / 2;
     } else {
-        // Hunt from Prey Node to Prey Node across the Web!
         spider.huntTimer++;
         if (spider.huntTimer % 150 === 0) {
             spider.currentPreyIdx = (spider.currentPreyIdx + 1) % preyNodes.length;
             activePrey = preyNodes[spider.currentPreyIdx];
-            // Walk 60% of the way toward that prey node
             spider.targetX = cx + (activePrey.x - cx) * 0.58;
             spider.targetY = cy + (activePrey.y - cy) * 0.58;
-            spider.laserTimer = 45; // Fire extraction beam!
+            spider.laserTimer = 45;
 
             const thEl = document.getElementById('spiderThought');
             if (thEl) {
@@ -809,7 +788,6 @@ function renderScene() {
         spider.targetAngle = Math.atan2(activePrey.y - spider.y, activePrey.x - spider.x) - Math.PI / 2;
     }
 
-    // Smooth Spider Movement & Rotation
     let moveDX = spider.targetX - spider.x;
     let moveDY = spider.targetY - spider.y;
     let moveSpeed = Math.hypot(moveDX, moveDY);
@@ -821,7 +799,200 @@ function renderScene() {
     while (angleDiff < -Math.PI) angleDiff += Math.PI * 2;
     spider.angle += angleDiff * 0.08;
 
-    // Walk cycle speeds up when walking!
     spider.walkCycle += 0.07 + Math.min(0.32, moveSpeed * 0.05);
 
-    // 6. Draw 4 Main Silk Anchor Beams Connected to Spider
+    for (let i = 0; i < corners.length; i++) {
+        let c = corners[i];
+        cornerVibration[i] *= 0.92;
+
+        ctx.save();
+        ctx.strokeStyle = c.color;
+        ctx.lineWidth = 2.4;
+        ctx.shadowBlur = 18;
+        ctx.shadowColor = c.color;
+
+        ctx.beginPath();
+        ctx.moveTo(spider.x, spider.y);
+        let vib = Math.sin(tick * 0.5) * cornerVibration[i];
+        let midX = (spider.x + c.x) / 2 + Math.sin(tick * 0.03 + i) * 18 + vib;
+        let midY = (spider.y + c.y) / 2 + Math.cos(tick * 0.03 + i) * 14 + vib;
+        ctx.quadraticCurveTo(midX, midY, c.x, c.y);
+        ctx.stroke();
+        ctx.restore();
+    }
+
+    // Draw Electric Plasma Extraction Beam if active
+    if (spider.laserTimer > 0) {
+        spider.laserTimer--;
+        drawElectricBeam(spider.x, spider.y, activePrey.x, activePrey.y, activeColor);
+    }
+
+    for (let p of pulses) {
+        p.progress += p.speed;
+        if (p.progress >= 1.0) {
+            p.progress = 0;
+            cornerVibration[p.corner] = 14;
+            triggerShockwave(spider.x, spider.y, corners[p.corner].color, 130);
+            p.corner = Math.floor(Math.random() * 4);
+        }
+
+        let c = corners[p.corner];
+        let px = c.x + (spider.x - c.x) * p.progress;
+        let py = c.y + (spider.y - c.y) * p.progress;
+
+        let tailProg = Math.max(0, p.progress - 0.08);
+        let tx = c.x + (spider.x - c.x) * tailProg;
+        let ty = c.y + (spider.y - c.y) * tailProg;
+
+        ctx.save();
+        let grad = ctx.createLinearGradient(tx, ty, px, py);
+        grad.addColorStop(0, 'transparent');
+        grad.addColorStop(1, c.color);
+
+        ctx.strokeStyle = grad;
+        ctx.lineWidth = p.width;
+        ctx.shadowBlur = 15;
+        ctx.shadowColor = c.color;
+        ctx.beginPath();
+        ctx.moveTo(tx, ty);
+        ctx.lineTo(px, py);
+        ctx.stroke();
+
+        ctx.fillStyle = '#fff';
+        ctx.beginPath();
+        ctx.arc(px, py, p.width * 1.25, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+    }
+
+    for (let i = shockwaves.length - 1; i >= 0; i--) {
+        let sw = shockwaves[i];
+        sw.radius += 3.8;
+        sw.alpha -= 0.022;
+        if (sw.alpha <= 0 || sw.radius >= sw.maxRadius) {
+            shockwaves.splice(i, 1);
+            continue;
+        }
+        ctx.save();
+        ctx.strokeStyle = sw.color;
+        ctx.lineWidth = 2;
+        ctx.globalAlpha = sw.alpha;
+        ctx.shadowBlur = 14;
+        ctx.shadowColor = sw.color;
+        ctx.beginPath();
+        ctx.arc(sw.x, sw.y, sw.radius, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.restore();
+    }
+
+    if (mouse.x && mouse.y) {
+        ctx.save();
+        ctx.strokeStyle = '#c084fc';
+        ctx.lineWidth = 1.8;
+        ctx.setLineDash([5, 5]);
+        ctx.shadowBlur = 12;
+        ctx.shadowColor = '#c084fc';
+        ctx.beginPath();
+        ctx.moveTo(spider.x, spider.y);
+        ctx.lineTo(mouse.x, mouse.y);
+        ctx.stroke();
+
+        ctx.fillStyle = '#c084fc';
+        ctx.beginPath();
+        ctx.arc(mouse.x, mouse.y, 4, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+    }
+
+    drawHuntingSpider(spider.x, spider.y, spider.angle, spider.walkCycle, activeColor);
+
+    requestAnimationFrame(renderScene);
+}
+renderScene();
+
+// =========================================================================
+// TELEMETRY POLLER (Every 5s from FastAPI backend)
+// =========================================================================
+async function fetchBotState() {
+    try {
+        const res = await fetch('/api/state');
+        const d = await res.json();
+
+        const score = parseFloat(d.composite_score || 0);
+        const scoreEl = document.getElementById('compositeScore');
+        scoreEl.textContent = (score >= 0 ? '+' : '') + score.toFixed(1);
+
+        const badge = document.getElementById('biasBadge');
+        badge.textContent = d.bias_label || 'NEUTRAL';
+        if (score >= 15) {
+            scoreEl.style.color = 'var(--green)';
+            badge.style.background = 'rgba(16,185,129,0.2)';
+            badge.style.color = 'var(--green)';
+        } else if (score <= -15) {
+            scoreEl.style.color = 'var(--red)';
+            badge.style.background = 'rgba(244,63,94,0.2)';
+            badge.style.color = 'var(--red)';
+        } else {
+            scoreEl.style.color = 'var(--cyan)';
+            badge.style.background = 'rgba(0,242,254,0.18)';
+            badge.style.color = 'var(--cyan)';
+        }
+
+        const bf = (parseFloat(d.btc_funding || 0) * 100).toFixed(4);
+        document.getElementById('ui-deriv').textContent = `Score: ${d.derivatives_score >= 0 ? '+' : ''}${d.derivatives_score} | BTC Fund: ${bf}%`;
+        document.getElementById('ui-sent').textContent = `F&G: ${d.fng_value} (${d.fng_label}) | RSS: ${d.bull_news}B / ${d.bear_news}Br`;
+        document.getElementById('ui-dom').textContent = `BTC.D: ${d.btc_dominance}% | Flow: ${d.altseason_status}`;
+        document.getElementById('ui-macro').textContent = `Freeze: ${d.is_news_freeze ? 'ACTIVE 🚨' : 'CLEAR ✅'} | ${d.active_macro_event || 'Safe'}`;
+
+        document.getElementById('bar-deriv').style.width = Math.min(100, Math.max(15, (parseFloat(d.derivatives_score || 0) + 100) / 2)) + '%';
+        document.getElementById('bar-sent').style.width = Math.min(100, Math.max(15, (parseFloat(d.sentiment_score || 0) + 100) / 2)) + '%';
+        document.getElementById('bar-dom').style.width = Math.min(100, Math.max(15, parseFloat(d.btc_dominance || 55))) + '%';
+
+        const freeze = Boolean(d.is_news_freeze);
+        const lg = document.getElementById('longGate');
+        const sg = document.getElementById('shortGate');
+        if (freeze) {
+            lg.textContent = '⛔ BLOCKED (FREEZE)'; lg.style.color = 'var(--red)';
+            sg.textContent = '⛔ BLOCKED (FREEZE)'; sg.style.color = 'var(--red)';
+        } else {
+            lg.textContent = score <= -50 ? '⛔ BLOCKED (BEAR)' : 'ALLOWED ✅';
+            lg.style.color = score <= -50 ? 'var(--red)' : 'var(--green)';
+            sg.textContent = score >= 50 ? '⛔ BLOCKED (BULL)' : 'ALLOWED ✅';
+            sg.style.color = score >= 50 ? 'var(--red)' : 'var(--green)';
+        }
+
+        document.getElementById('last-sync').textContent = 'LAST SYNC: ' + (d.last_synced || '');
+        document.getElementById('sync-status').textContent = d.supabase_synced ? 'SUPABASE IPC: SYNCED ✅' : 'SUPABASE IPC: LOCAL';
+
+        const newsBox = document.getElementById('newsBox');
+        if (d.headlines && d.headlines.length > 0) {
+            newsBox.innerHTML = d.headlines.map(h => {
+                let col = h.tag === 'BULLISH' ? 'var(--green)' : (h.tag.includes('BEARISH') || h.tag.includes('BLACKLIST') ? 'var(--red)' : 'var(--cyan)');
+                return `<div class="news-item">
+                    <span>${h.title}</span>
+                    <span class="news-tag mono" style="background:rgba(255,255,255,0.06); color:${col};">${h.tag}</span>
+                </div>`;
+            }).join('');
+        }
+
+        const blogBox = document.getElementById('blacklistCard');
+        if (d.blacklisted_tokens && d.blacklisted_tokens.length > 0) {
+            blogBox.style.background = 'rgba(244,63,94,0.12)';
+            blogBox.style.borderColor = 'rgba(244,63,94,0.4)';
+            blogBox.innerHTML = `<div style="font-size:12px; font-weight:800; color:var(--red);">🚨 BLOCKED PAIRS: ${d.blacklisted_tokens.join(', ')}</div>
+                               <div style="font-size:10px; color:var(--muted); margin-top:2px;">Protected from High-Risk Exploit/Delist News</div>`;
+        }
+    } catch (e) {
+        console.error(e);
+    }
+}
+fetchBotState();
+setInterval(fetchBotState, 5000);
+</script>
+</body>
+</html>
+"""
+
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 8080))
+    uvicorn.run("service_fundamental:app", host="0.0.0.0", port=port)
